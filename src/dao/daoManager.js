@@ -1,14 +1,15 @@
-
-//1 es MongoDB, caso contrario usariamos Postgres (supuesto) o cualquier otra base que se pretenda usar.
-export const getManagerProducts = async () => {
-    const modelProduct = process.env.SELECTEDBDD === 1 ? await import('./MongoDB/models/Product') : await import('./FileSystem/models/Product');
-
-    return modelProduct;
+export const getManagerCart = async () => {
+    const modelCart = process.env.SELECTEDBDD == 1 ? await import('./MongoDB/models/cart.js') : await import('./Postgresql/models/cart.js');
+    return modelCart;
 }
 
-export const getManagerMessage = async () => {
-    const modelMessage = process.env.SELECTEDBDD === 1 ? await import('./MongoDB/models/Message') : await import('./FileSystem/models/Message');
-
+export const getManagerMessages = async () => {
+    const modelMessage = process.env.SELECTEDBDD == 1 ? await import('./MongoDB/models/message.js') : await import('./Postgresql/models/message.js')
     return modelMessage;
+}
+
+export const getManagerProducts = async () => {
+    const modelProduct = process.env.SELECTEDBDD == 1 ? await import('./MongoDB/models/product.js') : await import('./Postgresql/models/product.js')
+    return modelProduct;
 }
 

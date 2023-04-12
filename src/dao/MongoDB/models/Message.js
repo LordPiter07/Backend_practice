@@ -1,5 +1,6 @@
 import { Schema } from "mongoose";
-import { ManagerMongoDB } from "../../../db/mongoDBManager.js";
+import { ManagerMongoDB } from "../../../db/mongoDBManager";
+
 
 const messageSchema = new Schema({
     nombre: String,
@@ -10,8 +11,11 @@ const messageSchema = new Schema({
     message: String
 })
 
-export class ManagerMessageMongoDB extends ManagerMongoDB {
-    constructor(){
-        super(process.env.MONGODBURL, "mensajes", messageSchema)
+export class managerMenssageMongoDB extends ManagerMongoDB {
+    
+    constructor() {
+        super(process.env.MONGODBURL, "Messages", messageSchema);
     }
+
+    //A futuro, aqui ire definiendo los metodos propios de esta clase
 }

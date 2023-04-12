@@ -2,75 +2,70 @@ import mongoose from "mongoose";
 
 export class ManagerMongoDB {
 
-    #url
-    constructor(url, coleccion, esquema) {
-        this.#url = url;
-        this.coleccion = coleccion;
-        this.esquema = new mongoose.Schema(esquema);
-        this.modelo = mongoose.model(this.coleccion, this.esquema);
+    constructor(url, collection, schema) {
+        this.url = url;
+        this.collection = collection;
+        this.schema = new mongoose.Schema(schema);
+        this.model = mongoose.model(this.collection, this.schema);
     }
 
-    async #setConexion() {
+    async setConnection() {
         try{
-            await mongoose.connect(this.#url);
-        } catch(error) {
+            await mongoose.connect(this.url);
+        }
+        catch (error){
             return error;
         }
     }
 
-    async getElements(){
-        this.#setConexion()
-        try{
-            const elementos = await this.modelo.find();
-            return elementos;
-
-        } catch(error) {
-            console.log('Error en consulta de todos los elementos en Mongo DB', error);
+    //Por medio de este metodo agrego 1 o varios elementos.    
+    async addElements(elements) { 
+        this.setConnection()
+        try {
+            return await this.model.insertMany(elements)
+        } catch (error) {
+            return error
         }
     }
 
-    async getElementByID(id){
-        this.#setConexion()
-        try{
-            const elementos = await this.modelo.findById(id);
-            return elementos;
-
-        } catch(error) {
-            console.log('Error en consulta de elemento en Mongo DB', error);
+    //Consulto mis elementos
+    async getElements() {
+        this.setConnection()
+        try {
+            return await this.model.find()
+        } catch (error) {
+            return error
         }
     }
 
-    async addElement(elemento){ //agrega uno o varios elementos
-        this.#setConnection();
-        try{
-            const mensaje = await this.modelo.insertMany(elemento) //la funcion 'insertMany' inserta un ARRAY a diferencia de 'insertOne'
-            return mensaje;
-
-        } catch(error) {
-            console.log('Error en Agregar elemento en Mongo DB', error);
+    //Consulto un elemento especifico.
+    async getElementById(id) { 
+        this.setConnection()
+        try {
+            return await this.model.findById(id)
+        } catch (error) {
+            return error
         }
     }
 
-    async updateElement(id, info){
-        this.#setConexion()
-        try{
-            const mensaje = await this.modelo.findByIdAndUpdate(id, info);
-            return mensaje;
-
-        } catch(error) {
-            console.log('Error en Actualizar de elemento en Mongo DB', error);
+    //Consulto y modifico un elemento
+    async updateElement(id, ...info) {
+        this.setConnection()
+        try {
+            return await this.model.findByIdAndUpdate(id, ...info)
+        } catch (error) {
+            return error
         }
     }
 
-    async deleteElement(id){
-        this.#setConexion()
-        try{
-            const respuesta = await this.modelo.findByIdAndRemove(id);
-            return respuesta;
-
-        } catch(error) {
-            console.log('Error en Eliminar de elemento en Mongo DB', error);
+    //Consulto y elimino un elemento.
+    async deleteElement(id) {
+        this.setConnection()
+        try {
+            return await this.model.findByIdAndDelete(id)
+        } catch (error) {
+            return error
         }
     }
-    
+
 }
